@@ -12,6 +12,7 @@ CItem::CItem(int code, string description) {
 	m_Code = code; m_Description = description;
 }
 
+
 CItem::CItem(int code, string description, double price, double discountRate) {
 	m_Code = code; m_Description = description; m_Price = price; m_DiscountRate = discountRate;
 }

@@ -19,14 +19,17 @@ private:
 
 public:
 	CItem(void);
+	//'new item constructor'
 	CItem(int code, string description);
 	/// <summary>
-/// 
-/// </summary>
-/// <param name="code"></param>
-/// <param name="description"></param>
-/// <param name="price"></param>
-/// <param name="discountRate"></param>
+	/// 
+	/// </summary>
+	/// <param name="code"></param>
+	/// <param name="description"></param>
+	/// <param name="price"></param>
+	/// <param name="discountRate"></param>
+
+	//'database constructor'
 	CItem(int code, string description, double price, double discountRate);
 	/// <summary>
 	/// Sets the price of the Product

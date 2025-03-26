@@ -50,11 +50,11 @@ bool CItem::HasCode(int searchCode) {
 
 void CItem::Display(void) {
 	cout << "Item code: " << m_Code << endl;
-	cout << "Item price: €" << m_Price << endl;
+	cout << "Item price: " << m_Price << " euros\n";
 	cout << "Item description: " << m_Description << endl;
 	cout << "Discount Rate: " << m_DiscountRate * 100 << "%" << endl;
 }
 
 double CItem::GetDiscount(void) {
-	return m_Price * m_DiscountRate;
+	return m_Price - (m_Price * m_DiscountRate);
 }

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+using namespace std;
 
 constexpr int SIZE = 25;
 // keep in mind, check that the first record is not greater than size
@@ -17,15 +18,18 @@ CItem list[SIZE];
 
 int numItems = 0;
 
-//void FillDummyData();
+int ShowMenu(void);
+void DoQuit(void);
 
 void DoDisplayFullPriceList(void);
 void DoDisplayItem(void);
 void DoTotalInvoice(void);
-
 void DoInitializePriceList(void);
 void DoSetItemPrice(void);
 void DoRemoveItemFromList(void);
+void DoAddItemToList(void);
+void DoSetItemDiscountRate(void);
+void DoOrderCost(void);
 
 
 int main()
@@ -37,8 +41,8 @@ int main()
 		cout << "Error opening file\n";
 		cout << "Use menu option 3 to add items to the list\n";
 	}
-    else
-    {
+	else
+	{
 		infile >> numItems;
 		if (numItems > SIZE)
 		{
@@ -46,32 +50,86 @@ int main()
 			cout << "Only the first " << SIZE << " items will be processed\n";
 			numItems = SIZE;
 		}
-        int code;
+		int code;
 		double price, discountRate;
 		string description;
-        for (int i = 0; i < numItems; i++)
-        {
+		for (int i = 0; i < numItems; i++)
+		{
 			infile >> code >> description >> price >> discountRate;
 			CItem item(code, description, price, discountRate);
 			list[i] = item;
-        }
-    }
-	
-	//opt.2
-    DoDisplayFullPriceList();
-	cout << endl;
-	//opt.8
-	DoTotalInvoice();
-	cout << endl;
-	//opt.6
-	DoDisplayItem();
-    //todo:LS:opt.1 DoInitializePriceList
-    //todo:MS:opt.3 DoAddItemToList
-    //todo:LS:opt.4 DoSetItemPrice
-    //todo:MS:opt.5 DoSetItemDiscountRate
-    //todo:MS:opt.7 DoOrderCost
-    //todo:LS:opt.9 DoRemoveItemFromList
+		}
+	}
+
+	int option;
+	do {
+		option = ShowMenu();
+		try {
+			switch (option) {
+			case 1:
+				DoInitializePriceList();
+				break;
+			case 2:
+				DoDisplayFullPriceList();
+				break;
+			case 3:
+				DoAddItemToList();
+				break;
+			case 4:
+				DoSetItemPrice();
+				break;
+			case 5:
+				DoSetItemDiscountRate();
+				break;
+			case 6:
+				DoDisplayItem();
+				break;
+			case 7:
+				DoOrderCost();
+				break;
+			case 8:
+				DoTotalInvoice();
+				break;
+			case 9:
+				DoRemoveItemFromList();
+				break;
+			case 0:
+				DoQuit();
+				break;
+			default:
+				cout << "Invalid option. Please try again.\n";
+			}
+		}
+		catch (...) {
+			cout << "!!! Error!!!" << endl;
+			cout << "Return to the menu" << endl;
+		}
+
+	} while (option != 0);
+
+	return 0;
 }
+
+int ShowMenu(void)
+{
+	int option;
+	cout << "\t Shopping List Menu " << endl;
+	cout << "\t1. Initialize Price List" << endl;
+	cout << "\t2. Display Full Price List" << endl;
+	cout << "\t3. Add Item to List" << endl;
+	cout << "\t4. Set Item Price" << endl;
+	cout << "\t5. Set Item Discount Rate" << endl;
+	cout << "\t6. Display Item" << endl;
+	cout << "\t7. Order Cost" << endl;
+	cout << "\t8. Total Invoice" << endl;
+	cout << "\t9. Remove Item from List" << endl;
+	cout << "\t0. Quit" << endl;
+	cout << endl;
+	cout << "\tEnter option : ";
+	cin >> option;
+	return option;
+}
+
 //Do -  by Dylan
 void DoDisplayFullPriceList(void)
 {
@@ -124,7 +182,7 @@ void DoInitializePriceList(void) {
 	cin >> choice;
 
 	if (choice == 'y' || choice == 'Y') {
-		list.clear();
+		// list.clear(); -- Error
 		cout << "Enter details for 5 items:\n";
 		for (int i = 0; i < 5; ++i) {
 			int code;
@@ -132,7 +190,7 @@ void DoInitializePriceList(void) {
 			double price, discountRate;
 			cout << "Enter code, description, price, and discount rate for item " << i + 1 << ": ";
 			cin >> code >> description >> price >> discountRate;
-			list.emplace_back(code, description, price, discountRate);
+			// list.emplace_back(code, description, price, discountRate); -- Error
 		}
 	}
 }
@@ -153,13 +211,13 @@ void DoRemoveItemFromList(void) {
 	int code;
 	cout << "Enter item code to remove: ";
 	cin >> code;
-	for (auto it = list.begin(); it != list.end(); ++it) {
+	/*for (auto it = list.begin(); it != list.end(); ++it) {
 		if (it->HasCode(code)) {
 			i.erase(it);
 			cout << "Item removed.\n";
 			return;
 		}
-	}
+	} -- Error*/
 	cout << "Item not found.\n";
 }
 
@@ -228,7 +286,7 @@ void DoSetItemDiscountRate(void)
 	}
 	if (!found)
 	{
-		cout << "Item with this code was not found." << endl;
+		cout << "Item with this code was not found." << endl; 
 	}
 }
 // G
@@ -269,6 +327,11 @@ void DoOrderCost(void)
 			break;
 		}
 	}
+}
+// exit menu
+void DoQuit(void)
+{
+	cout << "Exit. Goodbye!" << endl;
 }
 
 

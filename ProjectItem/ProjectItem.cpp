@@ -18,9 +18,13 @@ constexpr int SIZE = 25;
 CItem list[SIZE];
 int numItems = 0;
 
+CUser users[3] = {
+	CUser("Tom", "1234", 'M'),
+	CUser("Fred", "9876", 'A'),
+	CUser("Ger", "4321", 'A')
+};
 
-
-int ShowMenu(void);
+int ShowMenu(char uType);
 void DoQuit(void);
 
 void DoDisplayFullPriceList(void);
@@ -32,6 +36,9 @@ void DoRemoveItemFromList(void);
 void DoAddItemToList(void);
 void DoSetItemDiscountRate(void);
 void DoOrderCost(void);
+
+void DoAddUser(void);
+void DoEditUser(void);
 
 
 int main()
@@ -63,19 +70,54 @@ int main()
 		}
 	}
 
+	string Username, uPassword;
+	char uType = ' ';
+	bool loginSuccess = false;
+
+	cout << "Enter user name : ";
+	cin >> Username;
+	cout << "Enter password: ";
+	cin >> uPassword;
+	cout << "Enter user type (M / A): ";
+	cin >> uType;
+	//heck to see if a matching user exists 
+	for (int i = 0; i < 3; i++)
+	{
+		if (users[i].Match(Username, uPassword))
+		{
+			uType = users[i].GetType();
+			loginSuccess = true;
+			break;
+		}
+
+	}
+	if (!loginSuccess)
+	{
+		cout << "Invalid username or password." << endl;
+		return 0;
+	}
+
+	// Menu
 	int option;
 	do {
-		option = ShowMenu();
+		option = ShowMenu(uType);
+
 		try {
 			switch (option) {
 			case 1:
-				DoInitializePriceList();
+				if (uType == 'M')
+					DoInitializePriceList();
+				else
+					cout << "Invalid option for Assistant.\n";
 				break;
 			case 2:
 				DoDisplayFullPriceList();
 				break;
 			case 3:
-				DoAddItemToList();
+				if (uType == 'M')
+					DoAddItemToList();
+				else
+					cout << "Invalid option for Assistant.\n";
 				break;
 			case 4:
 				DoSetItemPrice();
@@ -93,7 +135,23 @@ int main()
 				DoTotalInvoice();
 				break;
 			case 9:
-				DoRemoveItemFromList();
+				if (uType == 'M')
+					DoRemoveItemFromList();
+				else
+					cout << "Invalid option.\n";
+				break;
+			case 10:
+				if (uType == 'M')
+					DoAddUser();
+				else
+					cout << "Invalid option\n";
+				break;
+
+			case 11:
+				if (uType == 'M')
+					DoEditUser();
+				else
+					cout << "Invalid option.\n";
 				break;
 			case 0:
 				DoQuit();
@@ -103,34 +161,48 @@ int main()
 			}
 		}
 		catch (...) {
-			cout << "!!! Error!!!" << endl;
-			cout << "Return to the menu" << endl;
+			cout << "!!! Error !!!" << endl;
+			cout << "Returning to menu..." << endl;
 		}
 
 	} while (option != 0);
 
 	return 0;
 }
-
-int ShowMenu(void)
+int ShowMenu(char uType)
 {
 	int option;
 	cout << "\t Shopping List Menu " << endl;
-	cout << "\t1. Initialize Price List" << endl;
-	cout << "\t2. Display Full Price List" << endl;
-	cout << "\t3. Add Item to List" << endl;
-	cout << "\t4. Set Item Price" << endl;
-	cout << "\t5. Set Item Discount Rate" << endl;
-	cout << "\t6. Display Item" << endl;
-	cout << "\t7. Order Cost" << endl;
-	cout << "\t8. Total Invoice" << endl;
-	cout << "\t9. Remove Item from List" << endl;
-	cout << "\t0. Quit" << endl;
-	cout << endl;
-	cout << "\tEnter option : ";
+	if (uType == 'M')
+	{
+		cout << "\t1. Initialize Price List" << endl;
+		cout << "\t2. Display Full Price List" << endl;
+		cout << "\t3. Add Item to List" << endl;
+		cout << "\t4. Set Item Price" << endl;
+		cout << "\t5. Set Item Discount Rate" << endl;
+		cout << "\t6. Display Item" << endl;
+		cout << "\t7. Order Cost" << endl;
+		cout << "\t8. Total Invoice" << endl;
+		cout << "\t9. Remove Item from List" << endl;
+		cout << "\t10. Add User" << endl;
+		cout << "\t11. Edit User" << endl;
+		cout << "\t0. Quit" << endl;
+	}
+	else if (uType == 'A')
+	{
+		cout << "\t2. Display Full Price List" << endl;
+		cout << "\t4. Set Item Price" << endl;
+		cout << "\t5. Set Item Discount Rate" << endl;
+		cout << "\t6. Display Item" << endl;
+		cout << "\t7. Order Cost" << endl;
+		cout << "\t8. Total Invoice" << endl;
+		cout << "\t0. Quit" << endl;
+	}
+	cout << "\n\tEnter option : ";
 	cin >> option;
 	return option;
 }
+
 
 //Do -  by Dylan
 void DoDisplayFullPriceList(void)
@@ -337,6 +409,55 @@ void DoQuit(void)
 {
 	cout << "Exit. Goodbye!" << endl;
 }
+
+void DoAddUser(void)
+{
+	string name, password;
+	char type;
+
+	cout << "Enter new user name: ";
+	cin >> name;
+	cout << "Enter new user password: ";
+	cin >> password;
+	cout << "Enter user type (M/A): ";
+	cin >> type;
+
+	CUser newUser(name, password, type);
+
+	for (int i = 0; i < 25; i++)
+	{
+		if (users[i].GetUserName() == "")
+		{
+			users[i] = newUser;
+			cout << "User added!" << endl;
+			return;
+		}
+	}
+
+	cout << "User list is full" << endl;
+}
+
+void DoEditUser(void)
+{
+	string name, newPassword;
+	cout << "Enter the username to edit: ";
+	cin >> name;
+
+	for (int i = 0; i < 25; i++)
+	{
+		if (users[i].GetUserName() == name)
+		{
+			cout << "Enter new password: ";
+			cin >> newPassword;
+			users[i] = CUser(name, newPassword, users[i].GetType());
+			cout << "Password updated!" << endl;
+			return;
+		}
+	}
+
+	cout << "User not found." << endl;
+}
+
 
 
 

@@ -2,8 +2,9 @@
 #include "CProjectItem.h"
 #include <iostream>
 #include <iomanip>
-#include <fstream>
+#include <fstream> 
 using namespace std;
+#include "CUser.h"
 
 constexpr int SIZE = 25;
 // keep in mind, check that the first record is not greater than size
@@ -15,8 +16,9 @@ constexpr int SIZE = 25;
 // this would be done by a an if statement comparing SIZE with the first record
 // leave all this till later - when doing enhancements
 CItem list[SIZE];
-
 int numItems = 0;
+
+
 
 int ShowMenu(void);
 void DoQuit(void);
@@ -184,14 +186,15 @@ void DoInitializePriceList(void) {
 	if (choice == 'y' || choice == 'Y') {
 		// list.clear(); -- Error
 		cout << "Enter details for 5 items:\n";
+		/* -- Eroor
 		for (int i = 0; i < 5; ++i) {
 			int code;
 			string description;
 			double price, discountRate;
 			cout << "Enter code, description, price, and discount rate for item " << i + 1 << ": ";
 			cin >> code >> description >> price >> discountRate;
-			// list.emplace_back(code, description, price, discountRate); -- Error
-		}
+			list.emplace_back(code, description, price, discountRate); r
+		}*/
 	}
 }
 void DoSetItemPrice(void) {
@@ -211,13 +214,14 @@ void DoRemoveItemFromList(void) {
 	int code;
 	cout << "Enter item code to remove: ";
 	cin >> code;
-	/*for (auto it = list.begin(); it != list.end(); ++it) {
+	/*  -- Error
+	for (auto it = list.begin(); it != list.end(); ++it) {
 		if (it->HasCode(code)) {
 			i.erase(it);
 			cout << "Item removed.\n";
 			return;
 		}
-	} -- Error*/
+	}*/
 	cout << "Item not found.\n";
 }
 

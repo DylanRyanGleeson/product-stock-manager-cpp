@@ -23,6 +23,11 @@ void DoDisplayFullPriceList(void);
 void DoDisplayItem(void);
 void DoTotalInvoice(void);
 
+void DoInitializePriceList(void);
+void DoSetItemPrice(void);
+void DoRemoveItemFromList(void);
+
+
 int main()
 {
 	//Process the file
@@ -51,6 +56,7 @@ int main()
 			list[i] = item;
         }
     }
+	
 	//opt.2
     DoDisplayFullPriceList();
 	cout << endl;
@@ -66,7 +72,7 @@ int main()
     //todo:MS:opt.7 DoOrderCost
     //todo:LS:opt.9 DoRemoveItemFromList
 }
-
+//Do -  by Dylan
 void DoDisplayFullPriceList(void)
 {
    
@@ -110,5 +116,160 @@ void DoTotalInvoice(void)
 	}
 	cout << "Total invoice amount: " << total << " euros\n";
 }
+
+//Do  - by Luka
+void DoInitializePriceList(void) {
+	char choice;
+	cout << "Initialize Price List: Do you want to start over? (y/n): ";
+	cin >> choice;
+
+	if (choice == 'y' || choice == 'Y') {
+		list.clear();
+		cout << "Enter details for 5 items:\n";
+		for (int i = 0; i < 5; ++i) {
+			int code;
+			string description;
+			double price, discountRate;
+			cout << "Enter code, description, price, and discount rate for item " << i + 1 << ": ";
+			cin >> code >> description >> price >> discountRate;
+			list.emplace_back(code, description, price, discountRate);
+		}
+	}
+}
+void DoSetItemPrice(void) {
+	int code;
+	double price;
+	cout << "Enter item code and new price: ";
+	cin >> code >> price;
+	for (auto& item : list) {
+		if (item.HasCode(code)) {
+			item.SetPrice(price);
+			return;
+		}
+	}
+	cout << "Item not found.\n";
+}
+void DoRemoveItemFromList(void) {
+	int code;
+	cout << "Enter item code to remove: ";
+	cin >> code;
+	for (auto it = list.begin(); it != list.end(); ++it) {
+		if (it->HasCode(code)) {
+			i.erase(it);
+			cout << "Item removed.\n";
+			return;
+		}
+	}
+	cout << "Item not found.\n";
+}
+
+//Do - by Maksym
+// C 
+void DoAddItemToList(void)
+{
+	if (numItems >= SIZE)
+	{
+		cout << "Item list is full. Cannot add more items" << endl;
+		return;
+	}
+	int code;
+	string description;
+	double price, discountrate;
+
+	cout << "Enter code: ";
+	cin >> code;
+	cin.ignore();
+
+	cout << "Enter description: ";
+	getline(cin, description);
+
+	CItem newItem(code, description);
+
+	cout << "Enter price: ";
+	cin >> price;
+
+	cout << "Enter discount: ";
+	cin >> discountrate;
+
+	//ADD in class
+	newItem.SetPrice(price);
+	newItem.SetDiscountRate(discountrate);
+
+	//ADD in list
+	list[numItems] = newItem;
+	numItems++;
+
+	cout << "Item added successfully" << endl;
+}
+// E
+void DoSetItemDiscountRate(void)
+{
+	int code;
+	double discountrate;
+	bool found = false;
+
+	cout << "Enter code: ";
+	cin >> code;
+
+
+	// search code
+	for (int i = 0; i < numItems; i++)
+	{
+		if (list[i].HasCode(code))
+		{
+			cout << "Enter discount rate: ";
+			cin >> discountrate;
+
+			list[i].SetDiscountRate(discountrate);
+			cout << "Discount rate updated for item" << endl;
+			found = true;
+			break;
+		}
+	}
+	if (!found)
+	{
+		cout << "Item with this code was not found." << endl;
+	}
+}
+// G
+void DoOrderCost(void)
+{
+	int code, quantity;
+	string discount = "";
+
+	cout << "Enter code: ";
+	cin >> code;
+
+	cout << "Enter quantity: ";
+	cin >> quantity;
+
+	//search
+	for (int i = 0; i < numItems; i++)
+	{
+		if (list[i].HasCode(code))
+		{
+			double priceI = list[i].GetPrice();
+			double discRI = list[i].GetDiscountRate();
+
+			cout << "Whether a discount will be given  Y / N: ";
+			cin >> discount;
+
+			if (discount == "Y" || discount == "y")
+			{
+				double priceWithDiscount = priceI - (priceI * discRI);
+				double total1 = priceWithDiscount * quantity;
+				cout << fixed << setprecision(2);
+				cout << "Order total with discount: " << total1 << " euros" << endl;
+			}
+			else
+			{
+				double total2 = priceI * quantity;
+				cout << "Order total without discount: " << total2 << endl;
+			}
+			break;
+		}
+	}
+}
+
 
 

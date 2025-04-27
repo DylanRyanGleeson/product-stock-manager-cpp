@@ -18,11 +18,12 @@ constexpr int SIZE = 25;
 CItem list[SIZE];
 int numItems = 0;
 
-CUser users[3] = {
+CUser users[5] = {
 	CUser("Tom", "1234", 'M'),
 	CUser("Fred", "9876", 'A'),
 	CUser("Ger", "4321", 'A')
 };
+
 
 int ShowMenu(char uType);
 void DoQuit(void);
